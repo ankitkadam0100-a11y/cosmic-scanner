@@ -1,0 +1,44 @@
+name: Cosmic scanner
+
+on:
+  schedule:
+    # 3, 18, 33 and 48 minutes past each hour = 3 minutes after every 15-minute candle closes.
+    # (Times are UTC, which only matters for the clock; the candles are the same everywhere.)
+    - cron: "3,18,33,48 * * * *"
+  workflow_dispatch: {}          # lets you press "Run workflow" by hand to test
+
+permissions:
+  contents: write                # needed so the job can save its memory (state folder)
+
+concurrency:
+  group: cosmic-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install packages
+        run: pip install -r requirements.txt
+
+      - name: Run scanner
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python github_scan.py
+
+      - name: Save memory (state folder)
+        if: always()
+        run: |
+          git config user.name "scanner-bot"
+          git config user.email "scanner-bot@users.noreply.github.com"
+          git add state
+          git diff --cached --quiet || (git commit -m "scanner state" && git pull --rebase && git push)
