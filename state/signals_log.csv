@@ -393,3 +393,5 @@ checked_utc,symbol,signal_candle_ist,mark,spread_pct,mins_to_expiry,alerted,reas
 2026-11-17 16:15:49,BTC-27NOV26-59000-C,17 Nov 21:45,5740.2,1.2,14144,True,
 2026-11-17 16:15:49,BTC-27NOV26-59500-C,17 Nov 21:45,5309.7,1.2,14144,True,
 2026-11-17 16:15:49,BTC-27NOV26-60000-C,17 Nov 21:45,4888.4,1.26,14144,True,
+2026-11-17 16:31:04,BTC-18NOV26-66600-C,17 Nov 22:00,20.6,,1169,False,price too low
+2026-11-17 16:31:04,BTC-20NOV26-74500-C,17 Nov 22:00,7.8,,4049,False,price too low
